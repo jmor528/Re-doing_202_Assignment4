@@ -50,20 +50,64 @@ Car* Platoon::get_head()
 
 void Platoon::remove(Car* c) 
 {
-  
+  // need to search platoon for car to remove
+  ID = c->get_id();
+  Car oldCar = head;
+
+  while(ID != oldCar->get_id() && tail->get_id() != oldCar->get_id()) {
+    oldCar = oldCar->get_next();
+  }
+  if (ID == oldCar->get_id()) {
+
+  }
+
+
 }
 
 void Platoon::append(Car* c) 
 {
+  newCar = new Car(c->get_id(),c->get_position());
+  tail->next = newCar;
+  newCar->set_prev(tail);
+  tail = newCar;
 
 }
 
 void Platoon::prepend(Car* c) 
 {
+  newCar = new Car(c->get_id(),c->get_position());
+  newCar->set_next(head);
+  head->set_prev(newCar);
+  head = newCar;
 
 }
 
 void Platoon::insert(Car* c) 
 {
+  int position = c->get_position();
+  int headPos = head->get_position();
+  int tailPos = tail->get_position();
+
+  if (position > headPos) {
+    prepend(c);
+  } else if (position < tailPos) {
+    append(c);
+  } else if (position < headPos && position > tailPos) {
+    // inserting between two cars
+    Car probe = head;
+    while (probe->get_position() > position) {
+      // moving down the list to insertion site
+      probe = probe->get_next();
+    }
+    probe = probe->get_prev();
+
+    newCar = new Car(c->get_id(),position);
+    newCar->set_next(probe->get_next());
+    probe->set_next(newCar);
+
+    newCar->set_prev(probe);
+    probe = newCar->get_next();
+    probe->set_prev(newCar);
+  }
 
 }
