@@ -19,15 +19,13 @@ class Platoon
         Car* get_tail();
         Car* get_head();
 
-        /* 
-        you may create methods below
-        For example, something like:
+        // helper functions
 
         void remove(Car* c); 
         void append(Car* c); 
         void prepend(Car* c); 
         void insert(Car* c);
-         */
+         
         
 
 };

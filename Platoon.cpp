@@ -48,3 +48,22 @@ Car* Platoon::get_head()
 	return head;
 }
 
+void Platoon::remove(Car* c) 
+{
+  
+}
+
+void Platoon::append(Car* c) 
+{
+
+}
+
+void Platoon::prepend(Car* c) 
+{
+
+}
+
+void Platoon::insert(Car* c) 
+{
+
+}

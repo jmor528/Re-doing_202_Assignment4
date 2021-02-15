@@ -39,6 +39,9 @@ int TrafficModel::get_lane_change_command(int id)
 void TrafficModel::update()
 {
 	// TODO: complete this function
+  
+
+
 }
 
 

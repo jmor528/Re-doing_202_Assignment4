@@ -7,7 +7,7 @@ Car::Car(int id, int pos){
 
 int Car::get_id()
 {
-    return id;
+  return id;
 }
 
 int Car::get_position()
@@ -22,20 +22,20 @@ void Car::set_position(int pos)
 
 void Car::set_next(Car* v)
 {
-    next = v;
+  next = v;
 }
 
 void Car::set_prev(Car* v)
-{
-    prev = v;
+{  
+  prev = v;
 }
 
 Car* Car::get_next()
 {
-    return next;
+  return next;
 }
 
 Car* Car::get_prev()
 {
-    return prev;
+  return prev;
 }
