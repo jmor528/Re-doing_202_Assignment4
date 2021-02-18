@@ -51,19 +51,26 @@ int TrafficModel::get_lane_change_command(int id)
 */ 
 bool TrafficModel::positionVacant(int lane, int pos)
 {
-  if (lane < 0 || (unsigned)lane >= platoons.size()) {
+  Platoon checkLane = platoons[lane];
+
+  if (lane < 0 || lane >= checkLane.size()) {
     // illegal lane indexing
     return false;
 
   } else {
-    Platoon checkLane = platoons[lane];
+    Car* car = checkLane.get_head();
+    int position = car->get_position();
 
-    if (checkLane.fetch(pos) != NULL) {
-      return true;
-    } else {
-      return false;
+    while(car->get_next() != NULL) {
+      if (position == pos) {
+        // spot is taken
+        return false;
+      }
+      car = car->get_next();
+
     }
 
+    return true;
   }
 
 }
@@ -90,9 +97,10 @@ void TrafficModel::update()
 
   for (unsigned int i = 0; i < platoons.size(); i++) {
     Platoon Lane = platoons[i];
+    int length = Lane.size();
     Car* car = Lane.get_head();
 
-    for (int j = 0; j < Lane.size(); j++) {
+    for (int j = 0; j < length; j++) {
 
       if (!car->get_hasMoved()) {
         int command;
@@ -139,7 +147,7 @@ void TrafficModel::update()
 
       }
       
-      
+      car = car->get_next();
     }
 
   }

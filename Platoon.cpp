@@ -64,27 +64,6 @@ int Platoon::size() const{
 	return i;
 }
 
-Car* Platoon::fetch(int pos) const {
-  // returns a car requested at some position
-  int s = size(), count = 1;
-
-	if(s==0 || s< pos){
-			cout<<"position specified is invalid as size= "<<s<<"pos= "<<pos<<"\n";
-			throw pos;
-
-      return 0;
-	} else {
-      Car* t = head;
-      while (count < pos) {
-        t = t->get_next();
-        count++;
-      }
-
-      return t;
-  }
-
-}
-
 void Platoon::remove(Car* c) 
 {
   // need to search platoon for car to remove

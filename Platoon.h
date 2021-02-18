@@ -21,7 +21,6 @@ class Platoon
 
         // helper functions
         int size() const;
-        Car* fetch(int pos) const;
         void remove(Car* c); 
         void append(Car* c); 
         void prepend(Car* c); 
