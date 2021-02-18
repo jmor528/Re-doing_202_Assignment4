@@ -1,4 +1,7 @@
 #include "Platoon.h"
+#include <iostream>
+
+using namespace std;
 
 Platoon::Platoon(string init)
 {
@@ -85,8 +88,8 @@ Car* Platoon::fetch(int pos) const {
 void Platoon::remove(Car* c) 
 {
   // need to search platoon for car to remove
-  ID = c->get_id();
-  Car probe = head;
+  int ID = c->get_id();
+  Car* probe = head;
 
   while(ID != probe->get_id() && tail->get_id() != probe->get_id()) {
    probe = probe->get_next();
@@ -110,8 +113,8 @@ void Platoon::remove(Car* c)
 
 void Platoon::append(Car* c) 
 {
-  newCar = new Car(c->get_id(),c->get_position());
-  tail->next = newCar;
+  Car* newCar = new Car(c->get_id(),c->get_position());
+  tail->set_next(newCar);
   newCar->set_prev(tail);
   tail = newCar;
 
@@ -119,7 +122,7 @@ void Platoon::append(Car* c)
 
 void Platoon::prepend(Car* c) 
 {
-  newCar = new Car(c->get_id(),c->get_position());
+  Car* newCar = new Car(c->get_id(),c->get_position());
   newCar->set_next(head);
   head->set_prev(newCar);
   head = newCar;
@@ -138,14 +141,14 @@ void Platoon::insert(Car* c)
     append(c);
   } else if (position < headPos && position > tailPos) {
     // inserting between two cars
-    Car probe = head;
+    Car* probe = head;
     while (probe->get_position() > position) {
       // moving down the list to insertion site
       probe = probe->get_next();
     }
     probe = probe->get_prev();
 
-    newCar = new Car(c->get_id(),position);
+    Car* newCar = new Car(c->get_id(),position);
     newCar->set_next(probe->get_next());
     probe->set_next(newCar);
 

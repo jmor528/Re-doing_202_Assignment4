@@ -21,6 +21,7 @@ class TrafficModel
 		vector<string> prevState;
 
 		int get_lane_change_command(int id);
+    bool positionVacant(int lane, int pos);
 
 	public:
 		TrafficModel();

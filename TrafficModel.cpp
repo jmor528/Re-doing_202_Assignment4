@@ -1,7 +1,20 @@
 #include "TrafficModel.h"
 
 TrafficModel::TrafficModel() { }
-TrafficModel::~TrafficModel(){ }
+TrafficModel::~TrafficModel(){
+
+  for (unsigned int i = 0; i < platoons.size(); i++) {
+    // remove all the cars
+    Platoon currentLane = platoons[i];
+    int length = currentLane.size();
+
+    for (int j = 0; j < length; j++) {
+      currentLane.remove(currentLane.get_head());
+    }
+
+  }
+
+ }
 
 void TrafficModel::set_commands(vector<string> commands)
 {
@@ -34,6 +47,28 @@ int TrafficModel::get_lane_change_command(int id)
 }
 
 /*
+ * A helper function that will check in platoons for a position in a particular lane being vacant or not.
+*/ 
+bool TrafficModel::positionVacant(int lane, int pos)
+{
+  if (lane < 0 || (unsigned)lane >= platoons.size()) {
+    // illegal lane indexing
+    return false;
+
+  } else {
+    Platoon checkLane = platoons[lane];
+
+    if (checkLane.fetch(pos) != NULL) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+}
+
+/*
  * The function that updates the vehicle positions and states.
  */
 void TrafficModel::update()
@@ -59,17 +94,51 @@ void TrafficModel::update()
 
     for (int j = 0; j < Lane.size(); j++) {
 
-      if (!car.get_hasMoved()) {
+      if (!car->get_hasMoved()) {
         int command;
-        command = this->get_lane_change_command(car.get_id());
+        command = this->get_lane_change_command(car->get_id());
         /*
         * 0: move forward
         * 1: turn left
         * 2: turn right
         */
-        
+        if (command == 2) {
+          if (this->positionVacant(i+1, car->get_position()) ) {
+            car->set_hasMoved(true);
+            // can perform the lane change
+            Platoon nextLane = platoons[i+1];
+            nextLane.insert(car);
+            Lane.remove(car);
+
+          } else if (this->positionVacant(i, car->get_position()+1)) {
+            car->set_hasMoved(true);
+            // move forward
+            car->set_position(car->get_position()+1);
+          }
+
+        } else if (command == 1) {
+          if (this->positionVacant(i-1, car->get_position())) {
+            car->set_hasMoved(true);
+            // can perform the lane change
+            Platoon nextLane = platoons[i-1];
+            nextLane.insert(car);
+            Lane.remove(car);
+          } else if (this->positionVacant(i, car->get_position()+1)) {
+            car->set_hasMoved(true);
+            // move forward
+            car->set_position(car->get_position()+1);
+          }
+
+        } else if (command == 0) {
+          if (this->positionVacant(i, car->get_position()+1)) {
+            car->set_hasMoved(true);
+            // move forward
+            car->set_position(car->get_position()+1);
+          }
+        }
 
       }
+      
       
     }
 
