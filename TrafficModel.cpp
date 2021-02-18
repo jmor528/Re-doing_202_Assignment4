@@ -38,9 +38,42 @@ int TrafficModel::get_lane_change_command(int id)
  */
 void TrafficModel::update()
 {
-	// TODO: complete this function
-  
+	/*
+   * Loop through the lanes (0 to n), each having a 
+   * platoon of cars. For each car, get the lane change
+   * command and update the car's position accordingly.
+  */
+  for (unsigned int i = 0; i < platoons.size(); i++) {
+    Platoon Lane = platoons[i];
+    Car* car = Lane.get_head();
+    for (int j = 0; j < Lane.size(); j++) {
+      // resetting each car
+      car->set_hasMoved(false);
+      car = car->get_next();
+    }
+  }
 
+  for (unsigned int i = 0; i < platoons.size(); i++) {
+    Platoon Lane = platoons[i];
+    Car* car = Lane.get_head();
+
+    for (int j = 0; j < Lane.size(); j++) {
+
+      if (!car.get_hasMoved()) {
+        int command;
+        command = this->get_lane_change_command(car.get_id());
+        /*
+        * 0: move forward
+        * 1: turn left
+        * 2: turn right
+        */
+        
+
+      }
+      
+    }
+
+  }
 
 }
 

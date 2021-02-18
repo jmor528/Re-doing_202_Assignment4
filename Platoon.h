@@ -16,11 +16,12 @@ class Platoon
 
     public:
         Platoon(string init);
-        Car* get_tail();
-        Car* get_head();
+        Car* get_tail() const;
+        Car* get_head() const;
 
         // helper functions
-
+        int size() const;
+        Car* fetch(int pos) const;
         void remove(Car* c); 
         void append(Car* c); 
         void prepend(Car* c); 

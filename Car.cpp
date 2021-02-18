@@ -3,6 +3,7 @@
 Car::Car(int id, int pos){
 	this->id = id;
 	this->position = pos;
+  this->hasMoved = false;
 }
 
 int Car::get_id()
@@ -18,6 +19,16 @@ int Car::get_position()
 void Car::set_position(int pos)
 {
 	this->position = pos;
+}
+
+bool Car::get_hasMoved()
+{
+  return hasMoved;
+}
+
+void Car::set_hasMoved(bool move) 
+{
+  this->hasMoved = move;
 }
 
 void Car::set_next(Car* v)

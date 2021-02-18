@@ -9,14 +9,17 @@ class Car {
 
 	private:
 		int id;
-        int position;
+    int position;
+    bool hasMoved;
 
-        Car* next=NULL;
-        Car* prev=NULL;
+    Car* next=NULL;
+    Car* prev=NULL;
 
 	public:
 		Car(int id, int pos);
 		int get_id();
+    bool get_hasMoved();
+    void set_hasMoved(bool move);
 		
 		int get_position();
 		void set_position(int pos);

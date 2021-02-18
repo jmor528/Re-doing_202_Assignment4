@@ -38,14 +38,48 @@ Platoon::Platoon(string init)
 	}
 }
 
-Car* Platoon::get_tail()
+Car* Platoon::get_tail() const
 {
 	return tail;
 }
 
-Car* Platoon::get_head()
+Car* Platoon::get_head() const
 {
 	return head;
+}
+
+int Platoon::size() const{
+	int i=0;
+	Car *t;
+	t=head;
+	//Iterate until the end of the list to
+	//determine the size
+	while(t!=0){
+		i++;
+		t = t->get_next();
+	}
+	return i;
+}
+
+Car* Platoon::fetch(int pos) const {
+  // returns a car requested at some position
+  int s = size(), count = 1;
+
+	if(s==0 || s< pos){
+			cout<<"position specified is invalid as size= "<<s<<"pos= "<<pos<<"\n";
+			throw pos;
+
+      return 0;
+	} else {
+      Car* t = head;
+      while (count < pos) {
+        t = t->get_next();
+        count++;
+      }
+
+      return t;
+  }
+
 }
 
 void Platoon::remove(Car* c) 
