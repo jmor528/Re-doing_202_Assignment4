@@ -69,24 +69,54 @@ void Platoon::remove(Car* c)
   // need to search platoon for car to remove
   int ID = c->get_id();
   Car* probe = head;
+  
+  if (this->size() == 1 && ID == probe->get_id()) {
+    delete c;
+    c = NULL;
+    return;
+  }
 
   while(ID != probe->get_id() && tail->get_id() != probe->get_id()) {
    probe = probe->get_next();
   }
+  
   if (ID == probe->get_id()) {
-    
-    probe = probe->get_prev();
-    probe->set_next(c->get_next());
-    probe = probe->get_next();
-    probe->set_prev(c->get_prev());
 
-    c->set_next(0);
-    c->set_prev(0);
-    delete c;
-    c = NULL;
+    if (ID == head->get_id()) {
+      // removing head
+      probe = probe->get_next();
+      probe->set_prev(0);
+      head = probe;
 
+      c->set_next(0);
+      delete c;
+      c = NULL;
+
+    } else if (ID == tail->get_id()) {
+      // removing tail
+      probe = probe->get_prev();
+      probe->set_next(0);
+      tail = probe;
+
+      c->set_prev(0);
+      delete c;
+      c = NULL;
+
+    } else {
+      probe = probe->get_prev();
+
+      probe->set_next(c->get_next());
+      probe = probe->get_next();
+      probe->set_prev(c->get_prev());
+      
+      c->set_next(0);
+      c->set_prev(0);
+      delete c;
+      c = NULL;
+
+    }
+   
   }
-
 
 }
 

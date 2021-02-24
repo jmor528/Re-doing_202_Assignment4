@@ -1,4 +1,7 @@
 #include "TrafficModel.h"
+#include <iostream>
+
+using namespace std;
 
 TrafficModel::TrafficModel() { }
 TrafficModel::~TrafficModel(){
@@ -99,6 +102,7 @@ void TrafficModel::update()
     Platoon Lane = platoons[i];
     int length = Lane.size();
     Car* car = Lane.get_head();
+    Car* probe = car;
 
     for (int j = 0; j < length; j++) {
 
@@ -118,10 +122,25 @@ void TrafficModel::update()
             nextLane.insert(car);
             Lane.remove(car);
 
+            // update
+            if (i == 0) {
+              car = Lane.get_head();
+              probe = car;
+            } else {
+              car = probe->get_next();
+            }
+
+
           } else if (this->positionVacant(i, car->get_position()+1)) {
             car->set_hasMoved(true);
             // move forward
             car->set_position(car->get_position()+1);
+
+            //update
+            car = car->get_next();
+            if (i > 0) {
+              probe = probe->get_next();
+            }
           }
 
         } else if (command == 1) {
@@ -131,10 +150,27 @@ void TrafficModel::update()
             Platoon nextLane = platoons[i-1];
             nextLane.insert(car);
             Lane.remove(car);
+
+            //update
+            if (i == 0) {
+              car = Lane.get_head();
+              probe = car;
+            } else {
+              car = probe->get_next();
+            }
+
           } else if (this->positionVacant(i, car->get_position()+1)) {
+
             car->set_hasMoved(true);
             // move forward
             car->set_position(car->get_position()+1);
+
+            //update
+            car = car->get_next();
+            if (i > 0) {
+              probe = probe->get_next();
+            }
+
           }
 
         } else if (command == 0) {
@@ -142,12 +178,25 @@ void TrafficModel::update()
             car->set_hasMoved(true);
             // move forward
             car->set_position(car->get_position()+1);
+
+            //update
+            car = car->get_next();
+            if (i > 0) {
+              probe = probe->get_next();
+            }
+
           }
         }
 
+      } else {
+        // go to next car
+        car = car->get_next();
+        if (i > 0) {
+          probe = probe->get_next();
+        }
+        
       }
       
-      car = car->get_next();
     }
 
   }
