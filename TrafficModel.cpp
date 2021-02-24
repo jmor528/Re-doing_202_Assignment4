@@ -54,13 +54,14 @@ int TrafficModel::get_lane_change_command(int id)
 */ 
 bool TrafficModel::positionVacant(int lane, int pos)
 {
-  Platoon checkLane = platoons[lane];
 
-  if (lane < 0 || lane >= checkLane.size()) {
+  if (lane < 0 || lane >= (int)platoons.size()) {
     // illegal lane indexing
     return false;
 
   } else {
+    Platoon checkLane = platoons[lane];
+
     Car* car = checkLane.get_head();
     int position = car->get_position();
 
@@ -123,11 +124,13 @@ void TrafficModel::update()
             Lane.remove(car);
 
             // update
-            if (i == 0) {
+            if (j == 0) {
               car = Lane.get_head();
               probe = car;
+              cout << "check 1" << endl;
             } else {
               car = probe->get_next();
+              cout << "check 2" << endl;
             }
 
 
@@ -138,9 +141,10 @@ void TrafficModel::update()
 
             //update
             car = car->get_next();
-            if (i > 0) {
+            if (j > 0) {
               probe = probe->get_next();
             }
+            cout << "check 2" << endl;
           }
 
         } else if (command == 1) {
@@ -152,11 +156,13 @@ void TrafficModel::update()
             Lane.remove(car);
 
             //update
-            if (i == 0) {
+            if (j == 0) {
               car = Lane.get_head();
               probe = car;
+              cout << "check 1" << endl;
             } else {
               car = probe->get_next();
+              cout << "check 2" << endl;
             }
 
           } else if (this->positionVacant(i, car->get_position()+1)) {
@@ -167,9 +173,10 @@ void TrafficModel::update()
 
             //update
             car = car->get_next();
-            if (i > 0) {
+            if (j > 0) {
               probe = probe->get_next();
             }
+            cout << "check 2" << endl;
 
           }
 
@@ -181,20 +188,20 @@ void TrafficModel::update()
 
             //update
             car = car->get_next();
-            if (i > 0) {
+            if (j > 0) {
               probe = probe->get_next();
             }
-
+            cout << "check 2" << endl;
           }
         }
 
       } else {
         // go to next car
         car = car->get_next();
-        if (i > 0) {
+        if (j > 0) {
           probe = probe->get_next();
         }
-        
+
       }
       
     }
