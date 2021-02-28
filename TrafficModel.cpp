@@ -89,6 +89,10 @@ void TrafficModel::update()
    * platoon of cars. For each car, get the lane change
    * command and update the car's position accordingly.
   */
+
+  // Car* car = new Car(0,0);
+  // Car* probe = new Car(0,0);
+
   for (unsigned int i = 0; i < platoons.size(); i++) {
     Platoon Lane = platoons[i];
     Car* car = Lane.get_head();
@@ -101,12 +105,12 @@ void TrafficModel::update()
 
   for (unsigned int i = 0; i < platoons.size(); i++) {
     Platoon Lane = platoons[i];
-    int length = Lane.size();
+    int j = 0;
     Car* car = Lane.get_head();
     Car* probe = car;
 
-    for (int j = 0; j < length; j++) {
-
+    while(car != NULL) {
+      
       if (!car->get_hasMoved()) {
         int command;
         command = this->get_lane_change_command(car->get_id());
@@ -204,9 +208,13 @@ void TrafficModel::update()
 
       }
       
+      j++;
     }
 
   }
+
+  delete car;
+  delete probe;
 
 }
 

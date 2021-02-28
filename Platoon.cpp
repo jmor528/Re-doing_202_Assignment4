@@ -73,7 +73,6 @@ void Platoon::remove(Car* c)
   if (this->size() == 1 && ID == probe->get_id()) {
     delete c;
     c = NULL;
-    cout << "removing" << endl;
     return;
   }
 
@@ -117,7 +116,6 @@ void Platoon::remove(Car* c)
 
     }
    
-    cout << "removing" << endl;
   }
 
 }
