@@ -25,7 +25,7 @@ class Platoon
         void append(Car* c); 
         void prepend(Car* c); 
         void insert(Car* c);
-         
+        Car* getCar(int numList) const;
         
 
 };

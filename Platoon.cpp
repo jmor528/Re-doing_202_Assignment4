@@ -73,6 +73,8 @@ void Platoon::remove(Car* c)
   if (this->size() == 1 && ID == probe->get_id()) {
     delete c;
     c = NULL;
+  
+    cout << "removing" << endl;
     return;
   }
 
@@ -116,25 +118,26 @@ void Platoon::remove(Car* c)
 
     }
    
+    cout << "removing" << endl;
   }
 
 }
 
 void Platoon::append(Car* c) 
 {
-  Car* newCar = new Car(c->get_id(),c->get_position());
-  tail->set_next(newCar);
-  newCar->set_prev(tail);
-  tail = newCar;
+  tail->set_next(c);
+  c->set_prev(tail);
+  c->set_next(0);
+  tail = c;
 
 }
 
 void Platoon::prepend(Car* c) 
 {
-  Car* newCar = new Car(c->get_id(),c->get_position());
-  newCar->set_next(head);
-  head->set_prev(newCar);
-  head = newCar;
+  c->set_next(head);
+  c->set_prev(0);
+  head->set_prev(c);
+  head = c;
 
 }
 
@@ -157,13 +160,30 @@ void Platoon::insert(Car* c)
     }
     probe = probe->get_prev();
 
-    Car* newCar = new Car(c->get_id(),position);
-    newCar->set_next(probe->get_next());
-    probe->set_next(newCar);
+    c->set_next(probe->get_next());
+    probe->set_next(c);
 
-    newCar->set_prev(probe);
-    probe = newCar->get_next();
-    probe->set_prev(newCar);
+    c->set_prev(probe);
+    probe = c->get_next();
+    probe->set_prev(c);
   }
 
+}
+
+Car* Platoon::getCar(int numList) const {
+  int s = size(), count = 1;
+	if(s==0 || s< numList){
+			cout<<"number in list specified is invalid as size= "<<s<<" num= "<<numList<<"\n";
+			throw numList;
+
+      return 0;
+	} else {
+      Car* t = head;
+      while (count < numList) {
+        t = t->get_next();
+        count++;
+      }
+
+      return t;
+  }
 }

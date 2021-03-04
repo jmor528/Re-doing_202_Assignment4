@@ -60,20 +60,21 @@ bool TrafficModel::positionVacant(int lane, int pos)
     return false;
 
   } else {
+    //cout << pos;
     Platoon checkLane = platoons[lane];
 
-    Car* car = checkLane.get_head();
-    int position = car->get_position();
+    for (int i = 0; i < checkLane.size(); i++) {
+      Car* currentCar = checkLane.getCar(i);
 
-    while(car->get_next() != NULL) {
-      if (position == pos) {
-        // spot is taken
+      if (currentCar->get_position() == pos) {
+        // spot taken
+        // cout << " false, position is " << currentCar->get_position() << endl;
         return false;
       }
-      car = car->get_next();
 
     }
 
+    //cout << " true" << endl;
     return true;
   }
 
@@ -90,9 +91,6 @@ void TrafficModel::update()
    * command and update the car's position accordingly.
   */
 
-  // Car* car = new Car(0,0);
-  // Car* probe = new Car(0,0);
-
   for (unsigned int i = 0; i < platoons.size(); i++) {
     Platoon Lane = platoons[i];
     Car* car = Lane.get_head();
@@ -104,117 +102,79 @@ void TrafficModel::update()
   }
 
   for (unsigned int i = 0; i < platoons.size(); i++) {
-    Platoon Lane = platoons[i];
-    int j = 0;
-    Car* car = Lane.get_head();
-    Car* probe = car;
+    Platoon currentLane = platoons[i];
+    int length = currentLane.size();
+    
+    for (int j = 0; j < length; j++) {
+      // cars already removed from this lane
+      int removed = length - currentLane.size();
 
-    while(car != NULL) {
-      
+      // current car to be checked
+      Car* car = currentLane.getCar(j - removed);
+
+      int id = car->get_id();
+      int pos = car->get_position();
+
       if (!car->get_hasMoved()) {
         int command;
-        command = this->get_lane_change_command(car->get_id());
+        command = this->get_lane_change_command(id);
         /*
         * 0: move forward
         * 1: turn left
         * 2: turn right
         */
+    
         if (command == 2) {
-          if (this->positionVacant(i+1, car->get_position()) ) {
-            car->set_hasMoved(true);
+          if (this->positionVacant(i+1, pos) ) {
             // can perform the lane change
             Platoon nextLane = platoons[i+1];
-            nextLane.insert(car);
-            Lane.remove(car);
+            Car* newCar = new Car(id,pos);
+            cout << "check 1" << endl;
 
-            // update
-            if (j == 0) {
-              car = Lane.get_head();
-              probe = car;
-              cout << "check 1" << endl;
-            } else {
-              car = probe->get_next();
-              cout << "check 2" << endl;
-            }
+            nextLane.insert(newCar);
+            currentLane.remove(car);
 
+            newCar->set_hasMoved(true);
 
-          } else if (this->positionVacant(i, car->get_position()+1)) {
-            car->set_hasMoved(true);
-            // move forward
-            car->set_position(car->get_position()+1);
-
-            //update
-            car = car->get_next();
-            if (j > 0) {
-              probe = probe->get_next();
-            }
-            cout << "check 2" << endl;
+          } else {
+            command = 0;
+           
           }
 
         } else if (command == 1) {
-          if (this->positionVacant(i-1, car->get_position())) {
-            car->set_hasMoved(true);
+          if (this->positionVacant(i-1, pos)) {
             // can perform the lane change
             Platoon nextLane = platoons[i-1];
-            nextLane.insert(car);
-            Lane.remove(car);
+            Car* newCar = new Car(id,pos);
+            cout << "check 1" << endl;
+            
+            nextLane.insert(newCar);
+            currentLane.remove(car);
 
-            //update
-            if (j == 0) {
-              car = Lane.get_head();
-              probe = car;
-              cout << "check 1" << endl;
-            } else {
-              car = probe->get_next();
-              cout << "check 2" << endl;
-            }
+            newCar->set_hasMoved(true);
 
-          } else if (this->positionVacant(i, car->get_position()+1)) {
-
-            car->set_hasMoved(true);
-            // move forward
-            car->set_position(car->get_position()+1);
-
-            //update
-            car = car->get_next();
-            if (j > 0) {
-              probe = probe->get_next();
-            }
-            cout << "check 2" << endl;
-
+          } else {
+            command = 0;
           }
 
-        } else if (command == 0) {
-          if (this->positionVacant(i, car->get_position()+1)) {
-            car->set_hasMoved(true);
+        }
+
+        if (command == 0) {
+          if (this->positionVacant(i, pos+1)) {
             // move forward
-            car->set_position(car->get_position()+1);
+            car->set_position(pos+1);
 
-            //update
-            car = car->get_next();
-            if (j > 0) {
-              probe = probe->get_next();
-            }
-            cout << "check 2" << endl;
+            car->set_hasMoved(true);
+        
           }
+
         }
 
-      } else {
-        // go to next car
-        car = car->get_next();
-        if (j > 0) {
-          probe = probe->get_next();
-        }
+      } 
 
-      }
-      
-      j++;
     }
 
   }
-
-  delete car;
-  delete probe;
 
 }
 
